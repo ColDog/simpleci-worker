@@ -26,6 +26,8 @@ module Worker
       @poll_interval = opts[:poll_interval] || 5 # 5 second polling
       @log_backtrace = !!opts[:log_backtrace]
 
+      @db_adapter = db_config[:adapter]
+
       create_table
     end
 
@@ -61,10 +63,19 @@ module Worker
 
     # locks a set of jobs for this worker
     def dequeue
-      query = db[:worker_jobs]
-                  .where(
-                      '`run_at` < ? AND `locked_by` IS NULL AND `id` in (SELECT `id` FROM `worker_jobs` ORDER BY `priority` DESC LIMIT ?)',
-                      Time.now, jobs_per_worker)
+
+      if @db_adapter == 'mysql2' || @db_adapter == 'mysql'
+        query = db[:worker_jobs]
+                    .limit(jobs_per_worker)
+                    .where('`run_at` < ?', Time.now)
+                    .where('`locked_by` IS NULL')
+                    .reverse_order('priority')
+      else
+        query = db[:worker_jobs]
+                    .where(
+                        '`run_at` < ? AND `locked_by` IS NULL AND `id` in (SELECT `id` FROM `worker_jobs` ORDER BY `priority` DESC LIMIT ?)',
+                        Time.now, jobs_per_worker)
+      end
 
       if queue_name
         query = query.where(queue: queue_name)

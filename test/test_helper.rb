@@ -5,6 +5,6 @@ $VERBOSE=nil
 
 require 'minitest/autorun'
 
-Worker.db = { adapter: 'sqlite' }
+Worker.db = { adapter: 'mysql2', database: 'worker-test', user: 'root' }
 Worker.queue = Worker::Queue.new
 Worker.logger = Logger.new(STDOUT)
