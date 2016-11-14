@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'worker/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "worker"
+  spec.name          = "simpleci-worker"
   spec.version       = Worker::VERSION
   spec.authors       = ["Colin Walker"]
   spec.email         = ["colinwalker270@gmail.com"]
@@ -29,6 +29,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "minitest", "~> 5.0"
 
-  spec.add_dependency "sequel"
+  spec.add_dependency "sequel", "~> 4.40"
   spec.add_dependency "activesupport", ">= 4.0"
 end
