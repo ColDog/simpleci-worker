@@ -10,8 +10,7 @@ module Worker
     def initialize(opts={})
       @logger = Logger.new(STDOUT)
 
-      db_config = opts[:db_config] || Worker.db_config
-
+      db_config = opts[:db_config] || Worker.db
       db_config.merge(logger: logger) if opts[:log_queries]
 
       @db = Sequel.connect(db_config)

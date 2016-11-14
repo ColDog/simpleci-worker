@@ -26,6 +26,7 @@ class TestJob < Worker::Job
 end
 
 class WorkerTest < Minitest::Test
+
   def test_that_it_has_a_version_number
     refute_nil ::Worker::VERSION
   end
