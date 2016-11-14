@@ -150,7 +150,7 @@ module Worker
             logger.info("Performed #{failures + successes} jobs in #{t2 - t1} seconds")
           end
 
-          return if number_to_run <= 0
+          return if number_to_run && number_to_run <= 0
           sleep(poll_interval)
         end
       rescue StandardError => e
